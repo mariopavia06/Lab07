@@ -21,6 +21,8 @@ class View:
         # Controller
         self.controller = None
 
+
+
     def show_alert(self, messaggio):
         self.alert.show_alert(messaggio)
 
@@ -35,29 +37,69 @@ class View:
         # --- Sezione 1: Intestazione ---
         self.txt_titolo = ft.Text(value="Biblioteche di Torino", size=38, weight=ft.FontWeight.BOLD)
 
-        # --- Sezione 2: Filtraggio ---
-        # TODO
+        self._dd_biblioteche = ft.Dropdown(
+            label="Biblioteca",
+            hint_text="Seleziona una biblioteca",
+            width=400,
+            on_select=self.controller.read_biblioteca)
+
+        self._dd_generi = ft.Dropdown(
+            label="Genere",
+            hint_text="Seleziona un genere",
+            width=400,
+            on_select=self.controller.read_genere)
+
+        self._btnCerca = ft.Button(
+            content=ft.Text("Cerca Libri"),
+            on_click=self.controller.handle_mostra_libri,
+            width=200)
 
         # Sezione 3: Libri
-        # TODO
+        self._lstResult = ft.ListView(expand=1, spacing=5, padding=10, auto_scroll=False)
 
         # --- Toggle Tema ---
         self.toggle_cambia_tema = ft.Switch(label="Tema scuro", value=True, on_change=self.cambia_tema)
 
-        # --- Layout della pagina ---
-        self.page.add(
-            self.toggle_cambia_tema,
-
-            # Sezione 1
-            self.txt_titolo,
-            ft.Divider(),
-
-            # Sezione 2: Filtraggio
-            # TODO
-
-            # Sezione 3: Libri
-            # TODO
+        layout_principale = ft.Column(
+            [
+                self.toggle_cambia_tema,
+                self.txt_titolo,
+                ft.Divider(),
+                ft.Row([self._dd_biblioteche, self._dd_generi], alignment=ft.MainAxisAlignment.CENTER),
+                ft.Row([self._btnCerca], alignment=ft.MainAxisAlignment.CENTER),
+                ft.Divider(),
+                self._lstResult
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            expand=True
         )
+
+        self.page.add(layout_principale)
+        self.page.scroll = "adaptive"
+        self.page.update()
+
+        # --- Layout della pagina ---
+        self.page.add()
+        self.toggle_cambia_tema
+
+        # Sezione 1
+        self.txt_titolo,
+        ft.Divider(),
+
+        # Sezione 2: Filtraggio
+        ft.Row(
+            [self._dd_biblioteche, self._dd_generi],
+            alignment=ft.MainAxisAlignment.CENTER
+        ),
+        ft.Row(
+            [self._btnCerca],
+            alignment=ft.MainAxisAlignment.CENTER
+        ),
+        ft.Divider(),
+
+        # Sezione 3: Libri
+        self._lstResult
 
         self.page.scroll = "adaptive"
         self.page.update()

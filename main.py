@@ -12,5 +12,9 @@ def main(page: ft.Page):
     my_view.set_controller(my_controller)
     my_view.load_interface()
 
+    my_controller.fill_dd_biblioteche()
+    my_controller.fill_dd_generi()
+
+
 
 ft.run(main)
